@@ -12,6 +12,8 @@ const priority = {
     '/':2,
 }
 
+let canFloat = false;
+
 function initializeButtons(){
     for(let i = 9; i >= -1; i--){
         let button = document.createElement('button');
@@ -41,7 +43,12 @@ function initializeButtons(){
 initializeButtons();
 
 function clearScreen(){
-    resultBar.textContent = '';
+    if (resultBar.textContent.length > 0){
+        resultBar.textContent = resultBar.textContent.slice(0, -1);
+    }
+    else{
+        resultBar.textContent = '';
+    }
 }
 
 function isDigit(a){
@@ -72,6 +79,10 @@ function postfix(formula){
     return postfixat;
 }
 
+function toTwoDecimalFloat(str) {
+  return parseFloat(parseFloat(str).toFixed(2));
+}
+
 function computeFormula(input){
     // build the formula
     let formula = [];
@@ -82,12 +93,13 @@ function computeFormula(input){
             number += '-'
             i++;
         }
-        while(isDigit(input[i]) && i < input.length){
+        while((isDigit(input[i]) || input[i] === '.') && i < input.length){
             number += input[i];
             i++;
         }
-        formula.push(parseInt(number));
-        
+
+        formula.push(toTwoDecimalFloat(number));
+    
         formula.push(input[i]);
     }
 
@@ -126,7 +138,9 @@ function computeFormula(input){
             }
         }
     }
-    return result.pop();
+    result = result.pop();
+
+    return parseFloat(result.toFixed(2));
 }
 
 buttonList.forEach(element => {
@@ -138,6 +152,13 @@ buttonList.forEach(element => {
 
         if(value >= '0' && value <= '9'){
             resultBar.textContent += value;
+        }
+        else if(value === '.'){
+            if(text.length > 0)
+                if(lastChar !== '.' && canFloat === false){
+                    resultBar.textContent += value;
+                    canFloat = true;
+                }
         }
         else if(operations.includes(value) && value !== '='){
             if(text.length === 0 && value !== '-')
@@ -161,12 +182,52 @@ buttonList.forEach(element => {
             clearScreen();
         }
 
+        if(operations.includes(value)){
+            canFloat = false;
+        }
+
         resultBar.scrollLeft = resultBar.scrollWidth;
 
     });
 });
 
+document.addEventListener("keydown", (event) => {
+    const key = event.key;
+    let keyId;
+    
+    if(key === 'Enter' || key === '='){
+        keyId = '=-key';
+    }
+    else if(key === "Backspace"){
+        keyId = 'AC-key';
+    }
+    else{
+        keyId = `${key}-key`
+    }
 
+    const button = document.getElementById(keyId);
+    if (button) {
+        button.classList.add('active');
+        button.click();
+    }
+})
 
+document.addEventListener("keyup", (event) => {
+    const key = event.key;
+    let keyId;
+    
+    if(key === 'Enter' || key === '='){
+        keyId = '=-key';
+    }
+    else if(key === "Backspace"){
+        keyId = 'AC-key';
+    }
+    else{
+        keyId = `${key}-key`
+    }
 
-
+    const button = document.getElementById(keyId);
+    if (button) {
+        button.classList.remove('active');
+    }
+})

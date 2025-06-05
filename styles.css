@@ -28,7 +28,9 @@ body{
     box-shadow: 4px 4px 4px rgba(0,0,0, 0.3);
 
     border-top: 2px solid rgba(255, 255, 255, 0.2);
-    border-left: 2px solid rgba(255, 255, 255, 0.3)
+    border-left: 2px solid rgba(255, 255, 255, 0.3);
+
+    transition: 0.2s;
 }
 
 .container{
@@ -182,4 +184,16 @@ button{
 
     border: none;
     border-radius: 12pt;
+
+    outline: none;
+}
+
+button:active{
+    scale: 1.1;
+    background-color: rgba(49, 56, 128, 0.536);
+}
+
+.active{
+    scale: 1.1;
+    background-color: rgba(49, 56, 128, 0.536);
 }
