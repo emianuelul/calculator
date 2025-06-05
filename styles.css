@@ -26,9 +26,26 @@ body{
     background-color: rgba(18, 22, 60, 0.536);
     backdrop-filter: blur(3.5rem);
     box-shadow: 4px 4px 4px rgba(0,0,0, 0.3);
+
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    border-left: 2px solid rgba(255, 255, 255, 0.3)
 }
 
 .container{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    flex-shrink: 1;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 40px;
+
+    height: 100vh;
+}
+
+.content{
+
     display: flex;
     flex-direction: column;
     flex-grow: 1;
@@ -38,40 +55,69 @@ body{
 
     gap: 40px;
 
-    height: 100vh;
+    height: 100%;
 }
 
 .calc{
     display: flex;
-    flex-direction: column;
-    flex-wrap: 1;
-    flex-basis: 700px;
+    flex-direction: row;
+    flex-basis: 600px;
 
     justify-content: center;
     align-items: center;
 
-    height: 700px;
-    width: 500px;
+    width: 700px;
 
     border-radius: 12pt;
+
+    padding: 20px;
+
+    gap: 20px;
 }
 
 .result{
-    flex-grow: 1;
+    overflow-y: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+    direction: ltr;
+
+    width: 400px;
+    height: 80px;
 
     font-size: 50px;
     font-family: "Roboto", sans-serif;
+    text-align: right;
+
+    padding: 10px;
+    border-radius: 12px;
+
     color: rgb(255, 253, 243);
 }
 
-.buttons{
-    flex-grow: 5;
-    align-self: stretch;
+/* scroll bar */
+.result::-webkit-scrollbar{
+    height: 6px;
+}
 
-    display:flex;
-    flex-direction: row;
+.result::-webkit-scrollbar-track{
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
 
-    padding: 20px;
+.result::-webkit-scrollbar-thumb{
+    border-radius: 4px;
+    background-color: rgba(156, 209, 255, 0.369);
+}
+
+.left{
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 100px;
 }
 
 .numbers{
@@ -80,11 +126,39 @@ body{
 
     flex-wrap: wrap;
 
-    justify-content: space-evenly;
+    justify-content: center;
     align-content: center;
     align-items: center;
 
-    gap: 30px;
+    gap: 20px;
+}
+
+.ops{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 20px
+}
+
+.right > button{
+    margin-left: auto;
+}
+
+footer{
+    width: 100%;
+    text-align: center;
+    color: rgb(255, 253, 243); 
+    font-size: 20px;
+    font-weight: 400;
+}
+
+footer a{
+    font-size: 25px;
+    text-decoration: none;
+    color: rgb(255, 253, 243);
 }
 
 button{
@@ -93,10 +167,13 @@ button{
     padding: 10px 25px;
     font-size: 30px;
     flex-basis: 40px;
+    text-align: center;
 
     flex-basis: 120px;
     flex-shrink: 1;
-    flex-grow: 1;
+
+    width: 70px;
+    height: 70px;
 
     font-family: "Roboto", sans-serif;
     color: rgb(255, 253, 243);
