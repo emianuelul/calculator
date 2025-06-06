@@ -6,3 +6,5 @@ Did this to practice my JavaScript programming. Made everything up from scratch,
 Took me 2 days, about 2-4 hours/work session.
 
 You can use your keyboard to input numbers / operations.
+
+Hold delete button to clear the screen.

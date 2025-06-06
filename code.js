@@ -4,7 +4,7 @@ let buttonList;
 
 const resultBar = document.querySelector('.result');
 
-const operations = ['AC','+', '-', '*', '/', '='];
+const operations = ['⌫','+', '-', '*', '/', '='];
 const priority = {
     '+':1,
     '-':1,
@@ -43,12 +43,7 @@ function initializeButtons(){
 initializeButtons();
 
 function clearScreen(){
-    if (resultBar.textContent.length > 0){
-        resultBar.textContent = resultBar.textContent.slice(0, -1);
-    }
-    else{
-        resultBar.textContent = '';
-    }
+    resultBar.textContent = '';
 }
 
 function isDigit(a){
@@ -132,7 +127,12 @@ function computeFormula(input){
                     break;
                 }
                 case '/':{
-                    result.push(a/b);
+                    if(b === 0){
+                        alert("Can't divide by 0");
+                    }
+                    else{
+                        result.push(a/b);
+                    }
                     break;
                 }
             }
@@ -160,7 +160,7 @@ buttonList.forEach(element => {
                     canFloat = true;
                 }
         }
-        else if(operations.includes(value) && value !== '='){
+        else if(operations.includes(value) && value !== '=' && value !== '⌫'){
             if(text.length === 0 && value !== '-')
                 return;
 
@@ -176,10 +176,12 @@ buttonList.forEach(element => {
             }
         }
         else if(value === '='){
-            resultBar.textContent = computeFormula(text);
-        }
-        else if(value === 'A'){
-            clearScreen();
+            if(operations.includes(text[text.length-1])){
+                return;
+            }
+            else{
+                resultBar.textContent = computeFormula(text);
+            }
         }
 
         if(operations.includes(value)){
@@ -191,7 +193,32 @@ buttonList.forEach(element => {
     });
 });
 
+let holdInterval;
+const deleteKey = document.querySelector('#⌫-key');
+deleteKey.addEventListener('mousedown', () => {
+
+    if(resultBar.textContent.length > 0)
+        resultBar.textContent = resultBar.textContent.slice(0, -1);
+
+    holdInterval = setTimeout(() => {
+        resultBar.textContent = '';
+
+    }, 750);
+})
+
+deleteKey.addEventListener('mouseup', () => {
+
+    clearTimeout(holdInterval);
+})
+deleteKey.addEventListener('mouseleave', () => {
+
+    clearTimeout(holdInterval);
+})
+
 document.addEventListener("keydown", (event) => {
+    if(event.repeat){
+        return;
+    }
     const key = event.key;
     let keyId;
     
@@ -199,17 +226,28 @@ document.addEventListener("keydown", (event) => {
         keyId = '=-key';
     }
     else if(key === "Backspace"){
-        keyId = 'AC-key';
+        keyId = '⌫-key';
     }
     else{
         keyId = `${key}-key`
     }
 
     const button = document.getElementById(keyId);
-    if (button) {
+    if(keyId === '⌫-key'){
         button.classList.add('active');
-        button.click();
+
+        if(resultBar.textContent.length > 0){
+            resultBar.textContent = resultBar.textContent.slice(0, -1);
+        }
+        
+        holdInterval = setTimeout(() => {
+            resultBar.textContent = '';
+        }, 750);
     }
+    else
+        if (button) {
+            button.click();
+        }
 })
 
 document.addEventListener("keyup", (event) => {
@@ -220,7 +258,8 @@ document.addEventListener("keyup", (event) => {
         keyId = '=-key';
     }
     else if(key === "Backspace"){
-        keyId = 'AC-key';
+        keyId = '⌫-key';
+        clearTimeout(holdInterval);
     }
     else{
         keyId = `${key}-key`
