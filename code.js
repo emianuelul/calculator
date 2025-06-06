@@ -101,9 +101,13 @@ function computeFormula(input){
     
         formula.push(input[i]);
     }
-
     formula.pop();
-    console.log(formula);
+
+
+    if(input[0] === '-' && input[1] === '-'){
+        formula.shift();
+        formula.shift();
+    }
 
     formula = postfix(formula);
     
