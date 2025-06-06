@@ -46,7 +46,7 @@ function initializeButtons(){
 initializeButtons();
 
 function clearScreen(){
-    equation.textContent = ' ';
+    equation.textContent = '';
     result.textContent = '';
 }
 
