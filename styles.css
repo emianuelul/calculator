@@ -96,7 +96,7 @@ body{
 
 }
 .equation{
-    height: 50%;
+    height: 60%;
     flex-grow: 1;
     color: rgba(255, 253, 243, 0.573);
 }
