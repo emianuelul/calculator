@@ -4,7 +4,6 @@ const result = document.querySelector('.equals');
 const equation = document.querySelector('.equation');
 let buttonList;
 
-equation.textContent = '\n';
 
 const resultBar = document.querySelector('.result');
 
