@@ -1,6 +1,10 @@
 const buttonSection = document.querySelector('.numbers');
 const operationSection = document.querySelector('.ops');
+const result = document.querySelector('.equals');
+const equation = document.querySelector('.equation');
 let buttonList;
+
+equation.textContent = '\n';
 
 const resultBar = document.querySelector('.result');
 
@@ -43,7 +47,8 @@ function initializeButtons(){
 initializeButtons();
 
 function clearScreen(){
-    resultBar.textContent = '';
+    equation.textContent = ' ';
+    result.textContent = '';
 }
 
 function isDigit(a){
@@ -146,17 +151,17 @@ function computeFormula(input){
 buttonList.forEach(element => {
     element.addEventListener('click', (event) => {
         const value = element.id[0];
-        const text = resultBar.textContent;
+        const text = result.textContent;
         const lastChar = text[text.length - 1];
         const secondLast = text[text.length - 2];
 
         if(value >= '0' && value <= '9'){
-            resultBar.textContent += value;
+            result.textContent += value;
         }
         else if(value === '.'){
             if(text.length > 0)
                 if(lastChar !== '.' && canFloat === false){
-                    resultBar.textContent += value;
+                    result.textContent += value;
                     canFloat = true;
                 }
         }
@@ -166,12 +171,12 @@ buttonList.forEach(element => {
 
             if(value === '-'){
                 if(!(lastChar === '-' && secondLast === '-')){
-                    resultBar.textContent += value;
+                    result.textContent += value;
                 }
             }
             else{
                 if(!operations.includes(lastChar)){
-                    resultBar.textContent += value;
+                    result.textContent += value;
                 }
             }
         }
@@ -180,7 +185,8 @@ buttonList.forEach(element => {
                 return;
             }
             else{
-                resultBar.textContent = computeFormula(text);
+                equation.textContent = text;
+                result.textContent = computeFormula(text);
             }
         }
 
@@ -197,23 +203,26 @@ let holdInterval;
 const deleteKey = document.querySelector('#⌫-key');
 deleteKey.addEventListener('mousedown', () => {
 
-    if(resultBar.textContent.length > 0)
-        resultBar.textContent = resultBar.textContent.slice(0, -1);
+    if(result.textContent.length > 0 && equation.textContent.length > 0){
+        clearScreen();
+    }
+
+    if(result.textContent.length > 0)
+        result.textContent = result.textContent.slice(0, -1);
 
     holdInterval = setTimeout(() => {
-        resultBar.textContent = '';
-
+        clearScreen();
     }, 750);
-})
+});
 
 deleteKey.addEventListener('mouseup', () => {
 
     clearTimeout(holdInterval);
-})
+});
 deleteKey.addEventListener('mouseleave', () => {
 
     clearTimeout(holdInterval);
-})
+});
 
 document.addEventListener("keydown", (event) => {
     if(event.repeat){
@@ -235,20 +244,25 @@ document.addEventListener("keydown", (event) => {
     const button = document.getElementById(keyId);
     if(keyId === '⌫-key'){
         button.classList.add('active');
-
-        if(resultBar.textContent.length > 0){
-            resultBar.textContent = resultBar.textContent.slice(0, -1);
-        }
         
+        if(result.textContent.length > 0 && equation.textContent.length > 0){
+            clearScreen();
+        }
+
+        if(result.textContent.length > 0){
+            result.textContent = result.textContent.slice(0, -1);
+        }
+
         holdInterval = setTimeout(() => {
-            resultBar.textContent = '';
+            clearScreen();
         }, 750);
     }
     else
         if (button) {
             button.click();
         }
-})
+});
+
 
 document.addEventListener("keyup", (event) => {
     const key = event.key;
@@ -269,4 +283,4 @@ document.addEventListener("keyup", (event) => {
     if (button) {
         button.classList.remove('active');
     }
-})
+});
